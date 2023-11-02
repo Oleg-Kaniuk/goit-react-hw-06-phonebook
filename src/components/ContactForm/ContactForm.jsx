@@ -1,20 +1,42 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addContact, getPhoneBookValue } from "redux/phoneBookSlice";
+import { nanoid } from 'nanoid'
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { Form, Input, Label, ButtonAdd } from "./ContactForm.styled";
 
-export const ContactForm = ({ onSubmit }) => {
+export const ContactForm = () => {
     
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
-
+    const dispatch = useDispatch();
+    const phoneBook = useSelector(getPhoneBookValue);
     
     const onSubmitAddContact = (evt) => {
         evt.preventDefault();
         
         const data = { name, number };
-        onSubmit(data);
+        const obj = { ...data, id: nanoid() };
+
+        if (newName(phoneBook, obj) !== undefined) {
+            Notify.warning(`${obj.name} is already in contacts`, {
+                width: '300px',
+                position: 'right-top',
+                timeout: 2000,
+                fontSize: '20px',
+        }); 
+            return;
+        };
+
+        dispatch(addContact(obj))
         
         reset();
     };
+
+    const newName = (phoneBook, obj) => {
+    return phoneBook.find(({ name }) =>
+      name.toLowerCase() === obj.name.toLowerCase());
+  };
 
     const onChangeInput = (evt) => {
         const { name, value } = evt.currentTarget;
