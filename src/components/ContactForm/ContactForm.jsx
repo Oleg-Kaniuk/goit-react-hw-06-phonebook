@@ -24,13 +24,14 @@ export const ContactForm = () => {
                 position: 'right-top',
                 timeout: 2000,
                 fontSize: '20px',
-        }); 
+            }); 
+            reset();
             return;
         };
 
         dispatch(addContact(obj))
         
-        reset();
+        // reset();
     };
 
     const newName = (phoneBook, obj) => {
