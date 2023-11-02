@@ -31,7 +31,7 @@ export const ContactForm = () => {
 
         dispatch(addContact(obj))
         
-        // reset();
+        reset();
     };
 
     const newName = (phoneBook, obj) => {
